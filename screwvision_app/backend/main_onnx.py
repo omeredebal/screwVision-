@@ -49,9 +49,7 @@ CLASS_LABELS_TR = {
 }
 
 # ONNX Model yolu
-MODEL_PATH = (
-    "/Users/omeredebal/Desktop/data_mining/screwVision/screwvision_model/run/weights/best.onnx"
-)
+MODEL_PATH = "/Users/omeredebal/Desktop/4. sınıf projeler/screwVison/screwVision/screwvision_model/run/weights/best.onnx"
 
 # Model boyutu (YOLO default)
 INPUT_SIZE = 640
@@ -332,6 +330,9 @@ async def detect_objects(file: UploadFile = File(...), confidence: float = 0.25)
     except HTTPException:
         raise
     except Exception as e:
+        import traceback
+        traceback.print_exc()
+        print(f"Error processing image detection: {e}")
         raise HTTPException(status_code=500, detail=f"Tespit hatasi: {str(e)}")
 
 
@@ -372,6 +373,9 @@ async def detect_objects_base64(data: dict):
     except HTTPException:
         raise
     except Exception as e:
+        import traceback
+        traceback.print_exc()
+        print(f"Error processing base64 detection: {e}")
         raise HTTPException(status_code=500, detail=f"Tespit hatasi: {str(e)}")
 
 
