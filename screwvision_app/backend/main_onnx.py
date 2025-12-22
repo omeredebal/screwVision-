@@ -49,7 +49,8 @@ CLASS_LABELS_TR = {
 }
 
 # ONNX Model yolu
-MODEL_PATH = "/Users/omeredebal/Desktop/4. sınıf projeler/screwVison/screwVision/screwvision_model/run/weights/best.onnx"
+
+MODEL_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../screwvision_model/run/weights/best.onnx"))
 
 # Model boyutu (YOLO default)
 INPUT_SIZE = 640
