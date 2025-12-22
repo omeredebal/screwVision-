@@ -1,0 +1,19 @@
+# MacOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+
+# Node / Mobile
+node_modules/
+.expo/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Project specific
+screwvision_model/run/
