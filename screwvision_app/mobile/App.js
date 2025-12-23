@@ -3,10 +3,12 @@ import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, ActivityIn
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
+import Constants from 'expo-constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Default URL if nothing saved
-const DEFAULT_URL = 'http://172.24.3.3:8000';
+// Default URL fallback
+const DEFAULT_URL = 'http://172.23.27.207:8000';
 const STORAGE_KEY = '@api_url';
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -91,11 +93,30 @@ export default function App() {
     loadApiUrl();
   }, []);
 
+  const getDynamicIP = () => {
+    const { debuggerHost } = Constants.expoConfig || {};
+    if (debuggerHost) {
+      return `http://${debuggerHost.split(':')[0]}:8000`;
+    }
+    // Fallback logic for production or if debuggerHost is missing
+    const { manifest2 } = Constants;
+    const uri = manifest2?.extra?.expoGo?.debuggerHost || manifest2?.extra?.expoClient?.hostUri || Constants.manifest?.hostUri;
+    if (uri) {
+      return `http://${uri.split(':')[0]}:8000`;
+    }
+    return DEFAULT_URL;
+  };
+
   const loadApiUrl = async () => {
     try {
       const savedUrl = await AsyncStorage.getItem(STORAGE_KEY);
       if (savedUrl) {
         setApiUrl(savedUrl);
+      } else {
+        // Otomatik IP tespiti
+        const dynamicUrl = getDynamicIP();
+        setApiUrl(dynamicUrl);
+        // İsteğe bağlı: Otomatik bulunan adresi kaydetme (her seferinde dinamik bakması daha iyidir, o yüzden kaydetmiyoruz)
       }
     } catch (e) {
       console.log('Failed to load API URL');
