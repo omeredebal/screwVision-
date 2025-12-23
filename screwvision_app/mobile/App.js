@@ -1,10 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, ActivityIndicator, Alert, Dimensions, SafeAreaView, StatusBar, Animated, Easing } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, ActivityIndicator, Alert, Dimensions, SafeAreaView, StatusBar, Animated, Easing, Modal, TextInput } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const API_URL = 'http://172.24.3.3:8000';
+// Default URL if nothing saved
+const DEFAULT_URL = 'http://172.24.3.3:8000';
+const STORAGE_KEY = '@api_url';
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 // Responsive breakpoints
@@ -58,6 +61,10 @@ let isDetectingRef = { current: false };
 
 export default function App() {
   const [permission, requestPermission] = useCameraPermissions();
+  const [apiUrl, setApiUrl] = useState(DEFAULT_URL);
+  const [isSettingsVisible, setIsSettingsVisible] = useState(false);
+  const [tempUrl, setTempUrl] = useState('');
+
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
   const [detections, setDetections] = useState([]);
@@ -78,6 +85,51 @@ export default function App() {
   const fadeInAnim = useRef(new Animated.Value(0)).current;
   const slideUpAnim = useRef(new Animated.Value(50)).current;
   const resultCardAnims = useRef([]).current;
+
+  // IP Adresini yukle
+  useEffect(() => {
+    loadApiUrl();
+  }, []);
+
+  const loadApiUrl = async () => {
+    try {
+      const savedUrl = await AsyncStorage.getItem(STORAGE_KEY);
+      if (savedUrl) {
+        setApiUrl(savedUrl);
+      }
+    } catch (e) {
+      console.log('Failed to load API URL');
+    }
+  };
+
+  const saveApiUrl = async () => {
+    try {
+      let finalUrl = tempUrl.trim();
+      // "http://" ekle eğer yoksa
+      if (!finalUrl.startsWith('http://') && !finalUrl.startsWith('https://')) {
+        finalUrl = `http://${finalUrl}`;
+      }
+      // Port yoksa varsayılan portu ekle (opsiyonel, kullanıcının tam girdiği varsayılır ama kolaylık olsun)
+      if (!finalUrl.includes(':', 6)) {
+        finalUrl = `${finalUrl}:8000`;
+      }
+
+      await AsyncStorage.setItem(STORAGE_KEY, finalUrl);
+      setApiUrl(finalUrl);
+      setIsSettingsVisible(false);
+      Alert.alert('Başarılı', `API Adresi güncellendi:\n${finalUrl}`);
+    } catch (e) {
+      Alert.alert('Hata', 'Ayarlar kaydedilemedi');
+    }
+  };
+
+  const openSettings = () => {
+    // Şu anki URL'den http:// kısmını ve portu temizleyip gösterelim mi?
+    // Hayır, direkt olduğu gibi gösterelim, kullanıcı düzenlesin.
+    setTempUrl(apiUrl);
+    setIsSettingsVisible(true);
+  };
+
 
   // Pulse efekti - tespit sırasında
   useEffect(() => {
@@ -173,7 +225,7 @@ export default function App() {
 
         if (!photo || !photo.base64) return;
 
-        const response = await fetch(API_URL + '/detect/base64', {
+        const response = await fetch(apiUrl + '/detect/base64', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ image: photo.base64, confidence: 0.25 }),
@@ -254,7 +306,7 @@ export default function App() {
 
   const detectObjects = async (base64Image) => {
     try {
-      const response = await fetch(API_URL + '/detect/base64', {
+      const response = await fetch(apiUrl + '/detect/base64', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ image: base64Image, confidence: 0.2 }),
@@ -659,7 +711,12 @@ export default function App() {
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" />
       <LinearGradient colors={['#2c3e50', '#34495e', '#2c3e50']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.header}>
-        <Text style={styles.headerText}>🛠️ ScrewVision</Text>
+        <View style={styles.headerContent}>
+          <Text style={styles.headerText}>🛠️ ScrewVision</Text>
+          <TouchableOpacity style={styles.settingsBtn} onPress={openSettings}>
+            <Text style={styles.settingsBtnText}>⚙️</Text>
+          </TouchableOpacity>
+        </View>
       </LinearGradient>
       <View style={styles.home}>
         <Image source={require('./assets/final-logo.png')} style={styles.logoImage} resizeMode="contain" />
@@ -682,21 +739,74 @@ export default function App() {
           <Text style={styles.secondaryBtnText}>🖼️ Galeriden Seç</Text>
         </TouchableOpacity>
       </View>
-      {isLoading && (
-        <View style={styles.loadingOverlay}>
-          <ActivityIndicator size="large" color="#2c3e50" />
-          <Text style={styles.loadingText}>Analiz ediliyor...</Text>
+      {
+        isLoading && (
+          <View style={styles.loadingOverlay}>
+            <ActivityIndicator size="large" color="#2c3e50" />
+            <Text style={styles.loadingText}>Analiz ediliyor...</Text>
+          </View>
+        )
+      }
+
+      {/* Settings Modal */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isSettingsVisible}
+        onRequestClose={() => setIsSettingsVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>📡 Bağlantı Ayarları</Text>
+            <Text style={styles.modalSub}>Backend IP Adresi</Text>
+
+            <TextInput
+              style={styles.input}
+              onChangeText={setTempUrl}
+              value={tempUrl}
+              placeholder="http://192.168.1.X:8000"
+              autoCapitalize="none"
+              autoCorrect={false}
+              keyboardType="url"
+            />
+
+            <View style={styles.modalButtons}>
+              <TouchableOpacity
+                style={[styles.modalBtn, styles.modalBtnCancel]}
+                onPress={() => setIsSettingsVisible(false)}
+              >
+                <Text style={styles.modalBtnTextCancel}>İptal</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.modalBtn, styles.modalBtnSave]}
+                onPress={saveApiUrl}
+              >
+                <Text style={styles.modalBtnTextSave}>Kaydet</Text>
+              </TouchableOpacity>
+            </View>
+
+            <Text style={styles.ipHint}>
+              Bilgisayarınızda terminalde yazan IP adresini buraya girin.{"\n"}
+              Örnek: http://192.168.1.35:8000
+            </Text>
+          </View>
         </View>
-      )}
-    </SafeAreaView>
+      </Modal>
+    </SafeAreaView >
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#F0F4F3' },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#F0F4F3' },
-  header: { backgroundColor: '#2c3e50', paddingVertical: scale(18), paddingHorizontal: scale(20), alignItems: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.15, shadowRadius: 4, elevation: 5 },
-  headerText: { color: '#fff', fontSize: scale(22), fontWeight: '700', letterSpacing: 1 },
+  container: { flex: 1, backgroundColor: '#F0F4F3' },
+  center: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#F0F4F3' },
+  header: { backgroundColor: '#2c3e50', paddingVertical: scale(14), paddingHorizontal: scale(20), shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.15, shadowRadius: 4, elevation: 5 },
+  headerContent: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', position: 'relative' },
+  headerText: { color: '#fff', fontSize: scale(22), fontWeight: '700', letterSpacing: 1, textAlign: 'center' },
+  settingsBtn: { position: 'absolute', right: 0, padding: 5 },
+  settingsBtnText: { fontSize: scale(24) },
   home: { flex: 1, padding: scale(24), paddingTop: scale(10), alignItems: 'center' }, // paddingTop eklendi
   logoImage: { width: scale(160), height: scale(160), marginTop: scale(10), marginBottom: scale(8) }, // marginTop ve marginBottom azaltıldı
   subtitle: { fontSize: scale(17), color: '#546E7A', marginBottom: scale(16), fontWeight: '500', letterSpacing: 0.5 }, // marginBottom azaltıldı
@@ -798,6 +908,20 @@ const styles = StyleSheet.create({
   resultEmojiSmall: { fontSize: scale(20) },
   resultInfoCompact: { flex: 1 },
   classNameSmall: { fontSize: scale(13), fontWeight: '700', color: '#263238', marginBottom: scale(4) },
+
+  // Modal Styles
+  modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center', padding: 20 },
+  modalContent: { backgroundColor: '#fff', borderRadius: 20, padding: 24, width: '100%', maxWidth: 400, alignItems: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.25, shadowRadius: 10, elevation: 10 },
+  modalTitle: { fontSize: 22, fontWeight: '700', color: '#2c3e50', marginBottom: 20 },
+  modalSub: { fontSize: 16, color: '#7f8c8d', marginBottom: 10, alignSelf: 'flex-start', marginLeft: 5 },
+  input: { width: '100%', height: 50, borderWidth: 1, borderColor: '#bdc3c7', borderRadius: 12, paddingHorizontal: 15, fontSize: 16, marginBottom: 20, backgroundColor: '#f9f9f9' },
+  modalButtons: { flexDirection: 'row', gap: 15, width: '100%' },
+  modalBtn: { flex: 1, paddingVertical: 14, borderRadius: 12, alignItems: 'center' },
+  modalBtnCancel: { backgroundColor: '#ecf0f1' },
+  modalBtnSave: { backgroundColor: '#2ecc71' },
+  modalBtnTextCancel: { color: '#7f8c8d', fontSize: 16, fontWeight: '600' },
+  modalBtnTextSave: { color: '#fff', fontSize: 16, fontWeight: '700' },
+  ipHint: { marginTop: 20, textAlign: 'center', color: '#95a5a6', fontSize: 13, lineHeight: 18 },
   confRowCompact: { flexDirection: 'row', alignItems: 'center', gap: scale(8) },
   confBarSmall: { flex: 1, height: 5, backgroundColor: '#E0E0E0', borderRadius: 3, overflow: 'hidden' },
   confFillSmall: { height: '100%', borderRadius: 3 },

@@ -253,9 +253,24 @@ def run_inference(image: np.ndarray, confidence: float = 0.25) -> tuple:
 
 @app.on_event("startup")
 async def startup_event():
-    """Uygulama baslagicinda modeli yukle"""
+    """Uygulama baslagicinda modeli yukle ve IP adresini yazdir"""
     try:
         load_model()
+        
+        # Yerel IP adresini bul ve yazdir
+        import socket
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            s.connect(("8.8.8.8", 80))
+            local_ip = s.getsockname()[0]
+            s.close()
+            print("\n" + "="*50)
+            print(f"Server calisiyor! Mobil uygulamada bu IP'yi kullanin:")
+            print(f"👉 http://{local_ip}:8000")
+            print("="*50 + "\n")
+        except Exception as e:
+            print(f"IP adresi bulunamadi: {e}")
+            
     except Exception as e:
         print(f"[HATA] Model yukleme hatasi: {e}")
 
