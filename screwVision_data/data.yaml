@@ -1,0 +1,13 @@
+train: /Users/omeredebal/Desktop/4. sınıf projeler/screwVison/screwVision_data/train/images
+val: /Users/omeredebal/Desktop/4. sınıf projeler/screwVison/screwVision_data/valid/images
+test: /Users/omeredebal/Desktop/4. sınıf projeler/screwVison/screwVision_data/test/images
+
+nc: 5
+names: ['allen', 'duz', 'phillips', 'pozidriv', 'torx']
+
+roboflow:
+  workspace: makinegormesi-upite
+  project: screwvision-pswh7
+  version: 2
+  license: Private
+  url: https://app.roboflow.com/makinegormesi-upite/screwvision-pswh7/2

@@ -22,24 +22,24 @@ const CLASS_COLORS = {
   phillips: '#E67E22',      // Turuncu (Phillips)
   pozidriv: '#3498DB',      // Mavi (Pozidriv)
   torx: '#9B59B6',          // Mor (Torx)
-  hex: '#2ECC71',           // Yeşil (Hex/Allen)
-  slotted: '#95A5A6',       // Gri (Düz/Slotted)
+  allen: '#2ECC71',         // Yeşil (Hex/Allen)
+  duz: '#95A5A6',           // Gri (Düz/Slotted)
 };
 
 const CLASS_LABELS = {
   phillips: 'Phillips (PH)',
   pozidriv: 'Pozidriv (PZ)',
   torx: 'Torx (T)',
-  hex: 'Allen (H)',
-  slotted: 'Düz (SL)',
+  allen: 'Allen (H)',
+  duz: 'Düz (SL)',
 };
 
 const CLASS_EMOJIS = {
   phillips: '➕',
   pozidriv: '❄️',
   torx: '⭐',
-  hex: '⬢',
-  slotted: '➖',
+  allen: '⬢',
+  duz: '➖',
 };
 
 // Helper fonksiyonlar

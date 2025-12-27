@@ -28,29 +28,30 @@ app.add_middleware(
 )
 
 # Model siniflari
-CLASS_NAMES = ["phillips", "pozidriv", "torx", "hex", "slotted"]
+# Sınıf İsimleri (Modelin eğitim sırasına göre)
+# ONNX modelinde: {0: 'allen', 1: 'duz', 2: 'phillips', 3: 'pozidriv', 4: 'torx'}
+CLASS_NAMES = ["allen", "duz", "phillips", "pozidriv", "torx"]
 
-# Sinif renkleri
+# Sınıflara göre renkler (BGR formatında - OpenCV için)
 CLASS_COLORS = {
-    "phillips": "#E67E22",
-    "pozidriv": "#3498DB",
-    "torx": "#9B59B6",
-    "hex": "#2ECC71",
-    "slotted": "#95A5A6",
+    "phillips": (34, 126, 230),  # Turuncu/Kırmızımsı
+    "pozidriv": (219, 152, 52),  # Mavi/Turkuaz
+    "torx": (182, 89, 155),      # Mor
+    "allen": (113, 204, 46),     # Yeşil
+    "duz": (166, 165, 149),      # Gri
 }
 
-# Turkce sinif isimleri
+# Türkçe Etiketler
 CLASS_LABELS_TR = {
+    "allen": "Allen (H)",
+    "duz": "Düz (SL)",
     "phillips": "Phillips (PH)",
     "pozidriv": "Pozidriv (PZ)",
     "torx": "Torx (T)",
-    "hex": "Allen (H)",
-    "slotted": "Düz (SL)",
 }
 
-# ONNX Model yolu
-
-MODEL_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../screwvision_model/run/weights/best.onnx"))
+# Model Yolu (Yeni eğitilen model)
+MODEL_PATH = os.path.join(os.path.dirname(__file__), "models", "best.onnx")
 
 # Model boyutu (YOLO default)
 INPUT_SIZE = 640
