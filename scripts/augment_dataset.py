@@ -6,7 +6,7 @@ import glob
 import shutil
 
 # Dataset Paths
-DATASET_DIR = "/Users/omeredebal/Desktop/4. sınıf projeler/screwVison/screwVision_data"
+DATASET_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data")
 SETS = ['train', 'valid', 'test']
 
 # Augmentation Pipeline

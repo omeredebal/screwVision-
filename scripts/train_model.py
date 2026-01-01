@@ -3,10 +3,11 @@ from ultralytics import YOLO
 import os
 
 # Define paths
-model_path = "yolov8n.pt" # Start from pretrained 'nano' model
+# Define paths
 current_dir = os.path.dirname(os.path.abspath(__file__))
-data_path = os.path.join(current_dir, "screwVision_data", "data.yaml")
-project_dir = os.path.join(current_dir, "screwVision_model", "runs", "train")
+model_path = os.path.join(current_dir, "..", "yolov8n.pt")
+data_path = os.path.join(current_dir, "..", "data", "data.yaml")
+project_dir = os.path.join(current_dir, "..", "experiments")
 name = "screwvision_v2_augmented"
 
 def train():

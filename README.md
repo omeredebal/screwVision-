@@ -31,7 +31,7 @@ Projeyi çalıştırmak için hem backend hem de mobil uygulamayı ayağa kaldı
 Terminalde proje dizinine gidin ve backend klasörüne geçin:
 
 ```bash
-cd screwvision_app/backend
+cd backend
 ```
 
 Sanal ortamı oluşturun ve bağımlılıkları yükleyin (ilk kez çalıştırıyorsanız):
@@ -46,8 +46,6 @@ Sunucuyu başlatın:
 
 ```bash
 python main.py
-# VEYA ONNX sürümü için:
-python main_onnx.py
 ```
 
 ### 2. Mobil Uygulamayı Başlatma
@@ -55,7 +53,7 @@ python main_onnx.py
 Yeni bir terminal penceresi açın ve mobil klasöre gidin:
 
 ```bash
-cd screwvision_app/mobile
+cd mobile
 ```
 
 Bağımlılıkları yükleyin:
@@ -74,10 +72,11 @@ Ekranda beliren QR kodu telefonunuzdaki **Expo Go** uygulaması ile taratın.
 
 ## 📂 Klasör Yapısı
 
-*   `screwvision_app/`: Uygulama kaynak kodları.
-    *   `backend/`: FastAPI sunucusu ve AI modelleri.
-    *   `mobile/`: React Native mobil uygulama kodları.
-*   `screwvision_model/`: Eğitilmiş yapay zeka model ağırlıkları (.pt ve .onnx).
+*   `backend/`: FastAPI sunucusu ve AI modelleri.
+*   `mobile/`: React Native mobil uygulama kodları.
+*   `data/`: Eğitim ve test veri setleri.
+*   `scripts/`: Yardımcı scriptler (eğitim, veri artırma vb.).
+*   `experiments/`: Eğitim sonuçları ve model ağırlıkları.
 
 ## 👥 Ekip
 
