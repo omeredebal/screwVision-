@@ -1,0 +1,13 @@
+train: train/images
+val: valid/images
+test: test/images
+
+nc: 5
+names: ['Hex-Allen', 'Phillips', 'Pozidriv', 'Slotted', 'Torx']
+
+roboflow:
+  workspace: deneme-0gccj
+  project: yokedici
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/deneme-0gccj/yokedici/dataset/1

@@ -1,83 +1,54 @@
 # 🛠️ ScrewVision
 
-**ScrewVision**, vida başlarını otomatik olarak tanıyan ve uygun tornavida ucunu öneren yapay zeka destekli bir mobil uygulamadır.
+> **AI-Powered Screw Classification & Recommendation System**
 
-## 🌟 Özellikler
+ScrewVision is a high-performance computer vision application designed to instantly identify and classify industrial screw types. Built with a modern tech stack, it combines a robust **FastAPI** backend with a sleek **React Native** mobile interface to deliver real-time results.
 
-*   **Gerçek Zamanlı Tanıma:** Kamera görüntüsü üzerinden anlık vida tespiti.
-*   **Geniş Kapsam:** Phillips (PH), Pozidriv (PZ), Torx (T), Allen (H) ve Düz (SL) vida tiplerini destekler.
-*   **Doğru Öneri:** Tespit edilen vida için en uygun tornavida ucunu önerir.
-*   **Hızlı ve Güvenli:** Cihaz üzerinde (On-Device) veya yerel ağda çalışan ONNX/YOLO modelleri ile yüksek performans.
+## ✨ Key Features
 
-## 🏗️ Mimari
+- **Real-Time Detection**: Instantly classifies screws like *Phillips, Torx, Allen, Slotted, and Pozidriv*.
+- **High Accuracy**: Powered by a custom-trained **YOLOv8** model running on ONNX Runtime.
+- **Cross-Platform**: Seamless mobile experience on both iOS and Android.
+- **Smart Hints**: Provides size and usage recommendations based on the detected screw type.
 
-Proje iki ana bileşenden oluşur:
+## 🏗️ Project Structure
 
-1.  **Mobile App (Frontend):** React Native ve Expo kullanılarak geliştirilmiştir. Kullanıcı arayüzünü ve kamera işlemlerini yönetir.
-2.  **Backend API:** Python ve FastAPI ile geliştirilmiştir. Görüntü işleme ve yapay zeka modelini (YOLOv8 / ONNX) barındırır.
+```bash
+screwVision/
+├── backend/       # FastAPI server & ONNX model logic
+├── mobile/        # React Native application source
+└── ml/            # Machine learning resources & training scripts
+```
 
-## 🚀 Kurulum ve Çalıştırma
+## 🚀 Getting Started
 
-Projeyi çalıştırmak için hem backend hem de mobil uygulamayı ayağa kaldırmanız gerekir.
+Follow these steps to set up the project locally.
 
-### Gerekli Ön Hazırlıklar
-
-*   Node.js ve npm
-*   Python 3.9+
-*   Expo Go (Mobil Cihazınızda)
-
-### 1. Backend'i Başlatma
-
-Terminalde proje dizinine gidin ve backend klasörüne geçin:
+### 1. Backend Setup
 
 ```bash
 cd backend
+python3 -m venv venv            # Create virtual environment
+source venv/bin/activate        # Activate environment
+pip install -r requirements.txt # Install dependencies
+python main.py                  # Start the server
 ```
+*Server will run at `http://0.0.0.0:8000`*
 
-Sanal ortamı oluşturun ve bağımlılıkları yükleyin (ilk kez çalıştırıyorsanız):
-
-```bash
-python3 -m venv venv
-source venv/bin/activate  # Windows için: venv\Scripts\activate
-pip install -r requirements.txt
-```
-
-Sunucuyu başlatın:
-
-```bash
-python main.py
-```
-
-### 2. Mobil Uygulamayı Başlatma
-
-Yeni bir terminal penceresi açın ve mobil klasöre gidin:
+### 2. Mobile App Setup
 
 ```bash
 cd mobile
+npm install     # Install packages
+npm start       # Launch Expo development server
 ```
 
-Bağımlılıkları yükleyin:
+## 🔧 Technology Stack
 
-```bash
-npm install
-```
+- **Core**: Python 3.9+, Node.js
+- **Machine Learning**: YOLOv8, ONNX Runtime, PyTorch
+- **Backend**: FastAPI, OpenCV, Uvicorn
+- **Mobile**: React Native, Expo, React Navigation
 
-Uygulamayı başlatın:
-
-```bash
-npx expo start --clear
-```
-
-Ekranda beliren QR kodu telefonunuzdaki **Expo Go** uygulaması ile taratın.
-
-## 📂 Klasör Yapısı
-
-*   `backend/`: FastAPI sunucusu ve AI modelleri.
-*   `mobile/`: React Native mobil uygulama kodları.
-*   `data/`: Eğitim ve test veri setleri.
-*   `scripts/`: Yardımcı scriptler (eğitim, veri artırma vb.).
-*   `experiments/`: Eğitim sonuçları ve model ağırlıkları.
-
-## 👥 Ekip
-
-*   ScrewVision Team
+---
+*© 2026 ScrewVision Project*

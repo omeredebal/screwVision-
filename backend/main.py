@@ -29,25 +29,25 @@ app.add_middleware(
 
 # Model siniflari
 # Sınıf İsimleri (Modelin eğitim sırasına göre)
-# ONNX modelinde: {0: 'allen', 1: 'duz', 2: 'phillips', 3: 'pozidriv', 4: 'torx'}
-CLASS_NAMES = ["allen", "duz", "phillips", "pozidriv", "torx"]
+# ONNX modelinde: ['Hex-Allen', 'Phillips', 'Pozidriv', 'Slotted', 'Torx']
+CLASS_NAMES = ["Hex-Allen", "Phillips", "Pozidriv", "Slotted", "Torx"]
 
 # Sınıflara göre renkler (BGR formatında - OpenCV için)
 CLASS_COLORS = {
-    "phillips": (34, 126, 230),  # Turuncu/Kırmızımsı
-    "pozidriv": (219, 152, 52),  # Mavi/Turkuaz
-    "torx": (182, 89, 155),      # Mor
-    "allen": (113, 204, 46),     # Yeşil
-    "duz": (166, 165, 149),      # Gri
+    "Hex-Allen": (113, 204, 46),     # Yeşil
+    "Phillips": (34, 126, 230),      # Turuncu/Kırmızımsı
+    "Pozidriv": (219, 152, 52),      # Mavi/Turkuaz
+    "Slotted": (166, 165, 149),      # Gri
+    "Torx": (182, 89, 155),          # Mor
 }
 
 # Türkçe Etiketler
 CLASS_LABELS_TR = {
-    "allen": "Allen (H)",
-    "duz": "Düz (SL)",
-    "phillips": "Phillips (PH)",
-    "pozidriv": "Pozidriv (PZ)",
-    "torx": "Torx (T)",
+    "Hex-Allen": "Allen (H)",
+    "Phillips": "Phillips (PH)",
+    "Pozidriv": "Pozidriv (PZ)",
+    "Slotted": "Düz (SL)",
+    "Torx": "Torx (T)",
 }
 
 # Model Yolu (Yeni eğitilen model)

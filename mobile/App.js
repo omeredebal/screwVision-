@@ -19,27 +19,27 @@ const scale = (size) => (SCREEN_WIDTH / 375) * size;
 
 // Endüstriyel ve profesyonel renkler
 const CLASS_COLORS = {
-  phillips: '#E67E22',      // Turuncu (Phillips)
-  pozidriv: '#3498DB',      // Mavi (Pozidriv)
-  torx: '#9B59B6',          // Mor (Torx)
-  allen: '#2ECC71',         // Yeşil (Hex/Allen)
-  duz: '#95A5A6',           // Gri (Düz/Slotted)
+  "Phillips": '#E67E22',      // Turuncu (Phillips)
+  "Pozidriv": '#3498DB',      // Mavi (Pozidriv)
+  "Torx": '#9B59B6',          // Mor (Torx)
+  "Hex-Allen": '#2ECC71',     // Yeşil (Hex/Allen)
+  "Slotted": '#95A5A6',       // Gri (Düz/Slotted)
 };
 
 const CLASS_LABELS = {
-  phillips: 'Phillips (PH)',
-  pozidriv: 'Pozidriv (PZ)',
-  torx: 'Torx (T)',
-  allen: 'Allen (H)',
-  duz: 'Düz (SL)',
+  "Phillips": 'Phillips (PH)',
+  "Pozidriv": 'Pozidriv (PZ)',
+  "Torx": 'Torx (T)',
+  "Hex-Allen": 'Allen (H)',
+  "Slotted": 'Düz (SL)',
 };
 
 const CLASS_EMOJIS = {
-  phillips: '➕',
-  pozidriv: '❄️',
-  torx: '⭐',
-  allen: '⬢',
-  duz: '➖',
+  "Phillips": '➕',
+  "Pozidriv": '❄️',
+  "Torx": '⭐',
+  "Hex-Allen": '⬢',
+  "Slotted": '➖',
 };
 
 // Helper fonksiyonlar
