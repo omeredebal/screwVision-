@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, ActivityIn
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Asset } from 'expo-asset';
 import Constants from 'expo-constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -24,6 +25,7 @@ const CLASS_COLORS = {
   "Torx": '#9B59B6',          // Mor (Torx)
   "Hex-Allen": '#2ECC71',     // Yeşil (Hex/Allen)
   "Slotted": '#95A5A6',       // Gri (Düz/Slotted)
+  "Hex_Socket": '#00FFFF',    // Cyan (Altıgen Soket)
 };
 
 const CLASS_LABELS = {
@@ -32,6 +34,7 @@ const CLASS_LABELS = {
   "Torx": 'Torx (T)',
   "Hex-Allen": 'Allen (H)',
   "Slotted": 'Düz (SL)',
+  "Hex_Socket": 'Altıgen Soket',
 };
 
 const CLASS_EMOJIS = {
@@ -40,6 +43,7 @@ const CLASS_EMOJIS = {
   "Torx": '⭐',
   "Hex-Allen": '⬢',
   "Slotted": '➖',
+  "Hex_Socket": '🔧',
 };
 
 // Helper fonksiyonlar
@@ -62,6 +66,7 @@ const getConfidenceColor = (confidence) => {
 let isDetectingRef = { current: false };
 
 export default function App() {
+  const [isReady, setIsReady] = useState(false);
   const [permission, requestPermission] = useCameraPermissions();
   const [apiUrl, setApiUrl] = useState(DEFAULT_URL);
   const [isSettingsVisible, setIsSettingsVisible] = useState(false);
@@ -88,9 +93,19 @@ export default function App() {
   const slideUpAnim = useRef(new Animated.Value(50)).current;
   const resultCardAnims = useRef([]).current;
 
-  // IP Adresini yukle
+  // IP Adresini ve kaynaklari yukle
   useEffect(() => {
-    loadApiUrl();
+    async function prepare() {
+      try {
+        await loadApiUrl();
+        await Asset.fromModule(require('./assets/final-logo.png')).downloadAsync();
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        setIsReady(true);
+      }
+    }
+    prepare();
   }, []);
 
   const getDynamicIP = () => {
@@ -506,6 +521,14 @@ export default function App() {
     });
   };
 
+  if (!isReady) {
+    return (
+      <View style={styles.center}>
+        <ActivityIndicator size="large" color="#2c3e50" />
+      </View>
+    );
+  }
+
   if (!permission) return <View style={styles.center}><ActivityIndicator size="large" color="#2c3e50" /></View>;
 
   if (!permission.granted) {
@@ -834,7 +857,7 @@ const styles = StyleSheet.create({
   infoCard: { backgroundColor: '#fff', borderRadius: scale(20), padding: scale(24), width: '100%', marginBottom: scale(12), shadowColor: '#2c3e50', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.12, shadowRadius: 12, elevation: 6 }, // marginBottom azaltıldı
   infoTitle: { fontSize: scale(18), fontWeight: '700', textAlign: 'center', marginBottom: scale(18), color: '#2c3e50' },
   classGrid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' },
-  classItem: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#F5F9F7', padding: scale(12), borderRadius: scale(24), margin: scale(5), shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.08, shadowRadius: 3, elevation: 2 },
+  classItem: { width: '44%', justifyContent: 'center', flexDirection: 'row', alignItems: 'center', backgroundColor: '#F5F9F7', padding: scale(12), borderRadius: scale(24), margin: scale(5), shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.08, shadowRadius: 3, elevation: 2 },
   classEmoji: { fontSize: scale(22), marginRight: scale(8) },
   classText: { fontSize: scale(14), color: '#37474F', fontWeight: '600' },
   primaryBtn: { backgroundColor: '#2c3e50', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingVertical: scale(18), paddingHorizontal: scale(24), borderRadius: scale(16), width: '100%', marginBottom: scale(8), shadowColor: '#2c3e50', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 5 }, // marginBottom azaltıldı

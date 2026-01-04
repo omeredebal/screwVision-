@@ -29,12 +29,13 @@ app.add_middleware(
 
 # Model siniflari
 # Sınıf İsimleri (Modelin eğitim sırasına göre)
-# ONNX modelinde: ['Hex-Allen', 'Phillips', 'Pozidriv', 'Slotted', 'Torx']
-CLASS_NAMES = ["Hex-Allen", "Phillips", "Pozidriv", "Slotted", "Torx"]
+# ONNX modelinde: ['Hex-Allen', 'Hex_Socket', 'Phillips', 'Pozidriv', 'Slotted', 'Torx']
+CLASS_NAMES = ["Hex-Allen", "Hex_Socket", "Phillips", "Pozidriv", "Slotted", "Torx"]
 
 # Sınıflara göre renkler (BGR formatında - OpenCV için)
 CLASS_COLORS = {
     "Hex-Allen": (113, 204, 46),     # Yeşil
+    "Hex_Socket": (0, 255, 255),     # Cam Göbeği (Cyan)
     "Phillips": (34, 126, 230),      # Turuncu/Kırmızımsı
     "Pozidriv": (219, 152, 52),      # Mavi/Turkuaz
     "Slotted": (166, 165, 149),      # Gri
@@ -44,6 +45,7 @@ CLASS_COLORS = {
 # Türkçe Etiketler
 CLASS_LABELS_TR = {
     "Hex-Allen": "Allen (H)",
+    "Hex_Socket": "Altıgen Soket",
     "Phillips": "Phillips (PH)",
     "Pozidriv": "Pozidriv (PZ)",
     "Slotted": "Düz (SL)",

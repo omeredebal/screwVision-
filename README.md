@@ -6,7 +6,7 @@ ScrewVision is a high-performance computer vision application designed to instan
 
 ## ✨ Key Features
 
-- **Real-Time Detection**: Instantly classifies screws like *Phillips, Torx, Allen, Slotted, and Pozidriv*.
+- **Real-Time Detection**: Instantly classifies screws like *Phillips, Torx, Allen, Hex Socket, Slotted, and Pozidriv*.
 - **High Accuracy**: Powered by a custom-trained **YOLOv8** model running on ONNX Runtime.
 - **Cross-Platform**: Seamless mobile experience on both iOS and Android.
 - **Smart Hints**: Provides size and usage recommendations based on the detected screw type.
